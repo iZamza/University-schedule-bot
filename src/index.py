@@ -14,6 +14,9 @@ with open(os.path.join('..', '..', 'token.txt')) as f:
 # to get info about bot delete '#' from next line
 # print(bot.getMe())
 
+def send_answer(chat_id, text, reply_markup=''):
+    bot.sendMessage(chat_id, text, reply_markup=reply_markup)
+
 
 def register_user(content_type, msg, chat_id):
     user_name = msg['from']['first_name']
@@ -47,51 +50,35 @@ def register_user(content_type, msg, chat_id):
             send_answer(chat_id, 'Пожалуйста, введите номер группы ')
 
 
-def send_answer(chat_id, text, reply_markup=''):
-    bot.sendMessage(chat_id, text, reply_markup=reply_markup)
-
-
 def run_student_dialogue(content_type, msg, chat_id, current_user):
+    main_menu = ReplyKeyboardMarkup(
+                keyboard=[
+                    [KeyboardButton(text="Получить расписание занятий на весь цикл")],
+                    [KeyboardButton(text="Получить вопросы к занятию")]
+                ]
+            )
     if content_type == 'text':
         with open('lessons.json', encoding='utf8') as lessons:
             lessons_data = json.load(lessons)
 
         if msg['text'] == 'Получить расписание занятий на весь цикл':
             send_answer(chat_id, '1. занятие тогда-то')
-
-        if msg['text'] in lessons_data.keys():
-            send_answer(chat_id, lessons_data[msg['text']])
-
-        if msg['text'] == 'Получить вопросы к занятию':
+        elif msg['text'] == 'Получить вопросы к занятию':
             lessons_list = []
             for lesson in lessons_data:
                 lessons_list.append([KeyboardButton(text=f'{lesson}')])
             keyboard_markup = ReplyKeyboardMarkup(
                 keyboard=lessons_list
             )
-            send_answer(chat_id, f'{current_user["name"]}! Выберите тему занятия', keyboard_markup)
+            send_answer(chat_id, f'Выберите тему занятия', keyboard_markup)
+        elif msg['text'] in lessons_data.keys():
+            send_answer(chat_id, lessons_data[msg['text']], main_menu)
         else:
-            keyboard_markup = ReplyKeyboardMarkup(
-                keyboard=[
-                    [KeyboardButton(text="Получить расписание занятий на весь цикл")],
-                    [KeyboardButton(text="Получить вопросы к занятию")]
-                ]
-            )
-            send_answer(chat_id, f'{current_user["name"]}! Выберите, что бы Вы хотели узнать', keyboard_markup)
+            send_answer(chat_id, f'{current_user["name"]}! Выберите, что бы Вы хотели узнать', main_menu)
 
 
-def run_admin_dialogue(content_type, msg, chat_id, current_user):
-    print(current_user)
-    if content_type == 'text':
-        if msg['text'] == 'bla':
-            print('bla')
-        else:
-            keyboard_markup = ReplyKeyboardMarkup(
-                keyboard=[
-                    [KeyboardButton(text="Отправить пушку!")],
-                ]
-            )
-            send_answer(chat_id, 'Жги, админ!', keyboard_markup)
+def run_admin_dialogue():
+    print('admin part')
 
 
 def handle(msg):
@@ -108,7 +95,7 @@ def handle(msg):
 
     if len(current_user):
         if current_user[0]['role'] == 'admin':
-            run_admin_dialogue(content_type, msg, chat_id, current_user[0])
+            run_admin_dialogue()
         else:
             run_student_dialogue(content_type, msg, chat_id, current_user[0])
     else:
