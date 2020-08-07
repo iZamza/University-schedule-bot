@@ -17,4 +17,3 @@ Plan for making application
 - [ ] Add possibility for students to take individual schedule, with dates and topics, and if 
 student on training add possibility to take question for today and tomorrow lessons  (till 21.08)
 - [ ] Add admin role with possibility to send push notification, test application (till 28.08)
-
