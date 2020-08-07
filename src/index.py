@@ -6,7 +6,6 @@ import json
 from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton
 
 # get telegram bot token
-current_dir = os.curdir
 with open(os.path.join('..', '..', 'token.txt')) as f:
     bot = telepot.Bot(f.readline())
 
@@ -20,7 +19,7 @@ def send_answer(chat_id, text, reply_markup=''):
 
 def register_user(content_type, msg, chat_id):
     user_name = msg['from']['first_name']
-    with open('groups.json') as groups:
+    with open(os.path.join('data', 'groups.json')) as groups:
         groups_data = json.load(groups)
 
     if content_type == 'text':
@@ -32,7 +31,7 @@ def register_user(content_type, msg, chat_id):
                 current_group = f"6{current_group}"
 
             if len(current_group) == 3 and current_group in groups_data.keys():
-                with open("users.json", "r+") as users_storage:
+                with open(os.path.join("data", "users.json"), "r+") as users_storage:
                     users_data = json.load(users_storage)
                     users_data.append({
                         "id": msg['from']['id'],
@@ -58,7 +57,7 @@ def run_student_dialogue(content_type, msg, chat_id, current_user):
                 ]
             )
     if content_type == 'text':
-        with open('lessons.json', encoding='utf8') as lessons:
+        with open(os.path.join('data', 'lessons.json'), encoding='utf8') as lessons:
             lessons_data = json.load(lessons)
 
         if msg['text'] == 'Получить расписание занятий на весь цикл':
@@ -84,7 +83,7 @@ def run_admin_dialogue():
 def handle(msg):
     content_type, chat_type, chat_id = telepot.glance(msg)
 
-    with open('users.json') as users_storage:
+    with open(os.path.join('data', 'users.json')) as users_storage:
         users_data = json.load(users_storage)
 
     current_user = []
