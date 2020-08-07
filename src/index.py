@@ -17,10 +17,12 @@ def send_answer(chat_id, text, reply_markup=''):
     bot.sendMessage(chat_id, text, reply_markup=reply_markup)
 
 
+with open(os.path.join('data', 'parsed_group_dates.json')) as groups:
+    groups_data = json.load(groups)
+
+
 def register_user(content_type, msg, chat_id):
     user_name = msg['from']['first_name']
-    with open(os.path.join('data', 'groups.json')) as groups:
-        groups_data = json.load(groups)
 
     if content_type == 'text':
         if msg['text'] != '/start':
@@ -61,7 +63,8 @@ def run_student_dialogue(content_type, msg, chat_id, current_user):
             lessons_data = json.load(lessons)
 
         if msg['text'] == 'Получить расписание занятий на весь цикл':
-            send_answer(chat_id, '1. занятие тогда-то')
+            send_answer(chat_id, '\n'.join([f'{groups_data[current_user["group"]][i]} - {lesson}'
+                                            for i, lesson in enumerate(lessons_data)]))
         elif msg['text'] == 'Получить вопросы к занятию':
             lessons_list = []
             for lesson in lessons_data:
