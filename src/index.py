@@ -66,11 +66,8 @@ def run_student_dialogue(content_type, msg, chat_id, current_user):
             send_answer(chat_id, '\n'.join([f'{groups_data[current_user["group"]][i]} - {lesson}'
                                             for i, lesson in enumerate(lessons_data)]))
         elif msg['text'] == 'Получить вопросы к занятию':
-            lessons_list = []
-            for lesson in lessons_data:
-                lessons_list.append([KeyboardButton(text=f'{lesson}')])
             keyboard_markup = ReplyKeyboardMarkup(
-                keyboard=lessons_list
+                keyboard=[[KeyboardButton(text=f'{lesson}')] for lesson in lessons_data]
             )
             send_answer(chat_id, f'Выберите тему занятия', keyboard_markup)
         elif msg['text'] in lessons_data.keys():
