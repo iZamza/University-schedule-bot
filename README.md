@@ -15,4 +15,4 @@ It's also simple:
 Plan for making application
 - [x] Make a bot, add possibility for register new user and get questions for lessons (till 14.08)
 - [x] Add possibility for students to take individual schedule, with dates and topics  (till 21.08)
-- [ ] Add admin role with possibility to send push notification for some group, test application (till 28.08)
+- [x] Add admin role with possibility to send push notification for some group, test application (till 28.08)
