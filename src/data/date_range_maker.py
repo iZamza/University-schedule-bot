@@ -16,10 +16,10 @@ with open('lessons.json', encoding='utf8') as lessons_list:
     lessons_len = len(json.load(lessons_list))
 
 for group in groups:
-    current_group_dates = groups[group].split(', ')
-    group_start_date = datetime.strptime(current_group_dates[0], '%d-%m-%Y')
-    group_end_date = datetime.strptime(current_group_dates[1], '%d-%m-%Y')
-    parsed_group_dates[group] = [date.strftime('%d-%m-%Y') for date in date_range(group_start_date, group_end_date)]
+    current_group_dates = groups[group].split('-')
+    group_start_date = datetime.strptime(current_group_dates[0], '%d.%m.%Y')
+    group_end_date = datetime.strptime(current_group_dates[1], '%d.%m.%Y')
+    parsed_group_dates[group] = [date.strftime('%d.%m.%Y') for date in date_range(group_start_date, group_end_date)]
     if len(parsed_group_dates[group]) > lessons_len:
         print(f'Пожалуйста, проверьте даты, количество занятий в группе {group} больше чем количество тем')
 

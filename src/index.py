@@ -13,14 +13,18 @@ with open(os.path.join('..', '..', 'token.txt')) as f:
 # to get info about bot delete '#' from next line
 # print(bot.getMe())
 
+
+# general function for sending messages for users
 def send_answer(chat_id, text, reply_markup=''):
     bot.sendMessage(chat_id, text, reply_markup=reply_markup)
 
 
+# get groups with parsed dates
 with open(os.path.join('data', 'parsed_group_dates.json')) as groups:
     groups_data = json.load(groups)
 
 
+# registration of new user
 def register_user(content_type, msg, chat_id):
     user_name = msg['from']['first_name']
 
@@ -52,6 +56,7 @@ def register_user(content_type, msg, chat_id):
             send_answer(chat_id, 'Пожалуйста, введите номер группы ')
 
 
+# student part
 def run_student_dialogue(content_type, msg, current_user):
     main_menu = ReplyKeyboardMarkup(
         keyboard=[
@@ -77,6 +82,7 @@ def run_student_dialogue(content_type, msg, current_user):
                         main_menu)
 
 
+# admin part
 def run_admin_dialogue(content_type, msg, current_user):
     if content_type == 'text':
         with open(os.path.join("data", "users.json"), "r", encoding='utf8') as users_storage:
@@ -103,6 +109,7 @@ def run_admin_dialogue(content_type, msg, current_user):
             send_answer(current_user['chat_id'], f'Ваше сообщение успешно отправлено выбранной группе.')
 
 
+# handle messages from users
 def handle(msg):
     content_type, chat_type, chat_id = telepot.glance(msg)
 
