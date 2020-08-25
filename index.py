@@ -6,7 +6,7 @@ import json
 from telepot.namedtuple import ReplyKeyboardMarkup, KeyboardButton
 
 # get telegram bot token
-with open(os.path.join('..', '..', 'token.txt')) as f:
+with open(os.path.join('..', 'token.txt')) as f:
     bot = telepot.Bot(f.readline())
 
 
