@@ -1,0 +1,2 @@
+# pip install -r requirements.txt
+telepot==12.7
